@@ -22,35 +22,39 @@
 // Testa la funzione con la query "london"
 
 async function getDashboardData(query) {
-    const [città, meteo, aereoporto] = await Promise.all([
-        fetch(`http://localhost:3333/destinations?search=${query}`),
-        fetch(`http://localhost:3333/weathers?search=${query}`),
-        fetch(`http://localhost:3333/airports?search=${query}`)
-    ])
+    try {
+        const [città, meteo, aereoporto] = await Promise.all([
+            fetch(`http://localhost:3333/destinations?search=${query}`),
+            fetch(`http://localhost:3333/weathers?search=${query}`),
+            fetch(`http://localhost:3333/airports?search=${query}`)
+        ])
 
 
-    const [cittàData, meteoData, aereoportoData] = await Promise.all([
-        città.json(),
-        meteo.json(),
-        aereoporto.json()
-    ])
+        const [cittàData, meteoData, aereoportoData] = await Promise.all([
+            città.json(),
+            meteo.json(),
+            aereoporto.json()
+        ])
 
-    console.log(cittàData)
-    console.log(meteoData)
-    console.log(aereoportoData)
+        console.log(cittàData)
+        console.log(meteoData)
+        console.log(aereoportoData)
 
-    // nuove proprietà city e country
-    const city = cittàData[0].name;
-    const country = cittàData[0].country;
-    // nuove proprietà temperature e weather
-    const temperature = meteoData[0].temperature;
-    const weather = meteoData[0].weather_description;
-    // nuova proprietà airport
-    const airport = aereoportoData[0].name;
+        // nuove proprietà city e country
+        const city = cittàData[0].name;
+        const country = cittàData[0].country;
+        // nuove proprietà temperature e weather
+        const temperature = meteoData[0].temperature;
+        const weather = meteoData[0].weather_description;
+        // nuova proprietà airport
+        const airport = aereoportoData[0].name;
 
-    return { city, country, temperature, weather, airport };
+        return { city, country, temperature, weather, airport };
 
+    } catch (error) {
+        throw new Error(`errore nel recupero dei dati: ${error.message}`);
 
+    }
 
 }
 
