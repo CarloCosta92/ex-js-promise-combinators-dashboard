@@ -41,13 +41,13 @@ async function getDashboardData(query) {
         console.log(aereoportoData)
 
         // nuove proprietà city e country
-        const city = cittàData[0].name;
-        const country = cittàData[0].country;
+        const city = cittàData.length > 0 ? cittàData[0].name : null;
+        const country = cittàData.length > 0 ? cittàData[0].country : null;
         // nuove proprietà temperature e weather
-        const temperature = meteoData[0].temperature;
-        const weather = meteoData[0].weather_description;
+        const temperature = meteoData.length > 0 ? meteoData[0].temperature : null;
+        const weather = meteoData.length > 0 ? meteoData[0].weather_description : null;
         // nuova proprietà airport
-        const airport = aereoportoData[0].name;
+        const airport = aereoportoData.length > 0 ? aereoportoData[0].name : null;
 
         return { city, country, temperature, weather, airport };
 
@@ -58,16 +58,26 @@ async function getDashboardData(query) {
 
 }
 
-getDashboardData('london')
+getDashboardData('vienna')
     .then(data => {
         console.log('Dasboard data:', data);
-        console.log(
-            `${data.city} is in ${data.country}.\n` +
-            `Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n` +
-            `The main airport is ${data.airport}.\n`
-        );
+        let message = '';
+        if (data.city && data.country) {
+            message += `${data.city} is in ${data.country}.\n`;
+        }
+        if (data.temperature && data.weather) {
+            message += `Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n`;
+        }
+        if (data.airport) {
+            message += `The main airport is ${data.airport}.\n`;
+        }
+        console.log(message);
     })
     .catch(error => console.error(error));
+
+//      Bonus 1 - Risultato vuoto
+// Se l’array di ricerca è vuoto, invece di far fallire l'intera funzione, semplicemente i dati relativi a quella chiamata verranno settati a null e  la frase relativa non viene stampata. Testa la funzione con la query “vienna” (non trova il meteo).
+
 
 
 
